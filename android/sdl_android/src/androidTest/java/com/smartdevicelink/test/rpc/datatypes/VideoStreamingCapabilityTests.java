@@ -14,9 +14,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 
 public class VideoStreamingCapabilityTests extends TestCase {
@@ -69,6 +71,7 @@ public class VideoStreamingCapabilityTests extends TestCase {
 		assertNull(Test.NULL, msg.getPixelPerInch());
 		assertNull(Test.NULL, msg.getScale());
 	}
+
 
 	public void testJson() {
 		JSONObject reference = new JSONObject();
