@@ -45,6 +45,9 @@ public class VideoStreamingCapability extends RPCStruct {
 	public static final String KEY_MAX_BITRATE = "maxBitrate";
 	public static final String KEY_SUPPORTED_FORMATS = "supportedFormats";
 	public static final String KEY_HAPTIC_SPATIAL_DATA_SUPPORTED = "hapticSpatialDataSupported";
+	public static final String KEY_DIAGONAL_SCREEN_SIZE = "diagonalScreenSize";
+	public static final String KEY_PIXEL_PER_INCH = "pixelPerInch";
+	public static final String KEY_SCALE = "scale";
 
 	public VideoStreamingCapability(){}
 	public VideoStreamingCapability(Hashtable<String, Object> hash){super(hash);}
@@ -91,5 +94,29 @@ public class VideoStreamingCapability extends RPCStruct {
 
 	public void setIsHapticSpatialDataSupported(Boolean hapticSpatialDataSupported) {
 		setValue(KEY_HAPTIC_SPATIAL_DATA_SUPPORTED, hapticSpatialDataSupported);
+	}
+
+	public Float getDiagonalScreenSize() {
+	    return getFloat(KEY_DIAGONAL_SCREEN_SIZE);
+	}
+
+	public Float getPixelPerInch() {
+	    return getFloat(KEY_PIXEL_PER_INCH);
+	}
+
+	public Float getScale() {
+	    return getFloat(KEY_SCALE);
+	}
+
+	public void setDiagonalScreenSize(Float generalInt) {
+		setValue(KEY_DIAGONAL_SCREEN_SIZE, generalInt);
+	}
+
+	public void setPixelPerInch(Float generalInt) {
+		setValue(KEY_PIXEL_PER_INCH, generalInt);
+	}
+
+	public void setScale(Float generalFloat) {
+		setValue(KEY_SCALE, generalFloat);
 	}
 }
