@@ -30,9 +30,9 @@ public class VideoStreamingCapabilityTests extends TestCase {
 		msg.setPreferredResolution(Test.GENERAL_IMAGERESOLUTION);
 		msg.setMaxBitrate(Test.GENERAL_INT);
 		msg.setIsHapticSpatialDataSupported(Test.GENERAL_BOOLEAN);
-		msg.setDiagonalScreenSize(Test.GENERAL_FLOAT);
-		msg.setPixelPerInch(Test.GENERAL_FLOAT);
-		msg.setScale(Test.GENERAL_FLOAT);
+		msg.setDiagonalScreenSize(Test.GENERAL_DOUBLE);
+		msg.setPixelPerInch(Test.GENERAL_DOUBLE);
+		msg.setScale(Test.GENERAL_DOUBLE);
 	}
 
 	/**
@@ -44,18 +44,18 @@ public class VideoStreamingCapabilityTests extends TestCase {
 		ImageResolution res = msg.getPreferredResolution();
 		Integer maxBitrate = msg.getMaxBitrate();
 		Boolean isHapticSpatialDataSupported = msg.getIsHapticSpatialDataSupported();
-		Float diagonalScreenSize = msg.getDiagonalScreenSize();
-		Float pixelPerInch = msg.getPixelPerInch();
-		Float scale = msg.getScale();
+		Double diagonalScreenSize = msg.getDiagonalScreenSize();
+		Double pixelPerInch = msg.getPixelPerInch();
+		Double scale = msg.getScale();
 
 		// Valid Tests
 		assertEquals(Test.MATCH, (List<VideoStreamingFormat>) Test.GENERAL_VIDEOSTREAMINGFORMAT_LIST, format);
 		assertEquals(Test.MATCH, (ImageResolution) Test.GENERAL_IMAGERESOLUTION, res);
 		assertEquals(Test.MATCH, (Integer) Test.GENERAL_INT, maxBitrate);
 		assertEquals(Test.MATCH, (Boolean) Test.GENERAL_BOOLEAN, isHapticSpatialDataSupported);
-		assertEquals(Test.MATCH, Test.GENERAL_FLOAT, diagonalScreenSize);
-		assertEquals(Test.MATCH, Test.GENERAL_FLOAT, pixelPerInch);
-		assertEquals(Test.MATCH, Test.GENERAL_FLOAT, scale);
+		assertEquals(Test.MATCH, Test.GENERAL_DOUBLE, diagonalScreenSize);
+		assertEquals(Test.MATCH, Test.GENERAL_DOUBLE, pixelPerInch);
+		assertEquals(Test.MATCH, Test.GENERAL_DOUBLE, scale);
 
 		// Invalid/Null Tests
 		VideoStreamingCapability msg = new VideoStreamingCapability();
@@ -78,9 +78,9 @@ public class VideoStreamingCapabilityTests extends TestCase {
 			reference.put(VideoStreamingCapability.KEY_PREFERRED_RESOLUTION, Test.GENERAL_IMAGERESOLUTION);
 			reference.put(VideoStreamingCapability.KEY_SUPPORTED_FORMATS, Test.GENERAL_VIDEOSTREAMINGFORMAT_LIST);
 			reference.put(VideoStreamingCapability.KEY_HAPTIC_SPATIAL_DATA_SUPPORTED, Test.GENERAL_BOOLEAN);
-			reference.put(VideoStreamingCapability.KEY_DIAGONAL_SCREEN_SIZE, Test.GENERAL_FLOAT);
-			reference.put(VideoStreamingCapability.KEY_PIXEL_PER_INCH, Test.GENERAL_FLOAT);
-			reference.put(VideoStreamingCapability.KEY_SCALE, Test.GENERAL_FLOAT);
+			reference.put(VideoStreamingCapability.KEY_DIAGONAL_SCREEN_SIZE, Test.GENERAL_DOUBLE);
+			reference.put(VideoStreamingCapability.KEY_PIXEL_PER_INCH, Test.GENERAL_DOUBLE);
+			reference.put(VideoStreamingCapability.KEY_SCALE, Test.GENERAL_DOUBLE);
 
 			JSONObject underTest = msg.serializeJSON();
 			assertEquals(Test.MATCH, reference.length(), underTest.length());

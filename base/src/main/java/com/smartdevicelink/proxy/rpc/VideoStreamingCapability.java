@@ -96,27 +96,27 @@ public class VideoStreamingCapability extends RPCStruct {
 		setValue(KEY_HAPTIC_SPATIAL_DATA_SUPPORTED, hapticSpatialDataSupported);
 	}
 
-	public Float getDiagonalScreenSize() {
-	    return getFloat(KEY_DIAGONAL_SCREEN_SIZE);
+	public Double getDiagonalScreenSize() {
+	    return getDouble(KEY_DIAGONAL_SCREEN_SIZE);
 	}
 
-	public Float getPixelPerInch() {
-	    return getFloat(KEY_PIXEL_PER_INCH);
+	public Double getPixelPerInch() {
+	    return getDouble(KEY_PIXEL_PER_INCH);
 	}
 
-	public Float getScale() {
-	    return getFloat(KEY_SCALE);
+	public Double getScale() {
+	    return getDouble(KEY_SCALE);
 	}
 
-	public void setDiagonalScreenSize(Float generalInt) {
+	public void setDiagonalScreenSize(Double generalInt) {
 		setValue(KEY_DIAGONAL_SCREEN_SIZE, generalInt);
 	}
 
-	public void setPixelPerInch(Float generalInt) {
+	public void setPixelPerInch(Double generalInt) {
 		setValue(KEY_PIXEL_PER_INCH, generalInt);
 	}
 
-	public void setScale(Float generalFloat) {
+	public void setScale(Double generalFloat) {
 		setValue(KEY_SCALE, generalFloat);
 	}
 }
