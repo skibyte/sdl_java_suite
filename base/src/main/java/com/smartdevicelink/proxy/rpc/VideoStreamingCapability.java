@@ -98,7 +98,7 @@ public class VideoStreamingCapability extends RPCStruct {
 	}
 
 	public Double getDiagonalScreenSize() {
-	    Object object = getDouble(KEY_DIAGONAL_SCREEN_SIZE);
+	    Object object = getValue(KEY_DIAGONAL_SCREEN_SIZE);
 		return SdlDataTypeConverter.objectToDouble(object);
 	}
 
@@ -107,7 +107,7 @@ public class VideoStreamingCapability extends RPCStruct {
 	}
 
 	public Double getPixelPerInch() {
-	    Object object = getDouble(KEY_PIXEL_PER_INCH);
+	    Object object = getValue(KEY_PIXEL_PER_INCH);
 	    return SdlDataTypeConverter.objectToDouble(object);
 	}
 
@@ -116,7 +116,7 @@ public class VideoStreamingCapability extends RPCStruct {
 	}
 
 	public Double getScale() {
-	    Object object = getDouble(KEY_SCALE);
+	    Object object = getValue(KEY_SCALE);
 	    return SdlDataTypeConverter.objectToDouble(object);
 	}
 
