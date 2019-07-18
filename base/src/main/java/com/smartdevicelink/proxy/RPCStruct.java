@@ -337,9 +337,6 @@ public class RPCStruct {
 	}
 
 	public Double getDouble(String key) {
-		if(store.get(key) instanceof Integer) {
-			return ((Integer)store.get(key)).doubleValue();
-		}
 		return (Double) store.get(key);
 	}
 

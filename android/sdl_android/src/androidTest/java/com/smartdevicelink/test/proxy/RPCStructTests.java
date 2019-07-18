@@ -155,10 +155,4 @@ public class RPCStructTests extends TestCase {
         testStruct.setValue(invalidKey, Test.GENERAL_STRING);
         assertNull(testStruct.getObject(Integer.class, invalidKey));
     }
-
-    public void testGetDoubleFromInteger() {
-        String validKey = "valid";
-        testStruct.setValue(validKey, Test.GENERAL_INTEGER);
-        assertEquals(Test.GENERAL_INTEGER.doubleValue(), testStruct.getDouble(validKey));
-    }
 }

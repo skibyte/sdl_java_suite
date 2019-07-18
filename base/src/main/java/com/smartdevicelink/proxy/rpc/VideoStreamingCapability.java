@@ -32,6 +32,7 @@
 package com.smartdevicelink.proxy.rpc;
 
 import com.smartdevicelink.proxy.RPCStruct;
+import com.smartdevicelink.util.SdlDataTypeConverter;
 
 import java.util.Hashtable;
 import java.util.List;
@@ -97,26 +98,29 @@ public class VideoStreamingCapability extends RPCStruct {
 	}
 
 	public Double getDiagonalScreenSize() {
-	    return getDouble(KEY_DIAGONAL_SCREEN_SIZE);
+	    Object object = getDouble(KEY_DIAGONAL_SCREEN_SIZE);
+		return SdlDataTypeConverter.objectToDouble(object);
+	}
+
+	public void setDiagonalScreenSize(Double diagonalScreenSize) {
+		setValue(KEY_DIAGONAL_SCREEN_SIZE, diagonalScreenSize);
 	}
 
 	public Double getPixelPerInch() {
-	    return getDouble(KEY_PIXEL_PER_INCH);
+	    Object object = getDouble(KEY_PIXEL_PER_INCH);
+	    return SdlDataTypeConverter.objectToDouble(object);
+	}
+
+	public void setPixelPerInch(Double pixelPerInch) {
+		setValue(KEY_PIXEL_PER_INCH, pixelPerInch);
 	}
 
 	public Double getScale() {
-	    return getDouble(KEY_SCALE);
+	    Object object = getDouble(KEY_SCALE);
+	    return SdlDataTypeConverter.objectToDouble(object);
 	}
 
-	public void setDiagonalScreenSize(Double generalInt) {
-		setValue(KEY_DIAGONAL_SCREEN_SIZE, generalInt);
-	}
-
-	public void setPixelPerInch(Double generalInt) {
-		setValue(KEY_PIXEL_PER_INCH, generalInt);
-	}
-
-	public void setScale(Double generalFloat) {
-		setValue(KEY_SCALE, generalFloat);
+	public void setScale(Double scale) {
+		setValue(KEY_SCALE, scale);
 	}
 }
