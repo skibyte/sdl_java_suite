@@ -50,12 +50,14 @@ public class VideoStreamingParameters {
 	private final int DEFAULT_FRAMERATE = 30;
 	private final int DEFAULT_BITRATE = 512000;
 	private final int DEFAULT_INTERVAL = 5;
+	private final double DEFAULT_SCALE = 1.0;
 
 
 	private int displayDensity;
 	private int frameRate;
 	private int bitrate;
 	private int interval;
+	private double scale;
 	private ImageResolution resolution;
 	private VideoStreamingFormat format;
 
@@ -64,6 +66,7 @@ public class VideoStreamingParameters {
 	    frameRate = DEFAULT_FRAMERATE;
 	    bitrate = DEFAULT_BITRATE;
 	    interval = DEFAULT_INTERVAL;
+	    scale = DEFAULT_SCALE;
 	    resolution = new ImageResolution();
 	    resolution.setResolutionWidth(DEFAULT_WIDTH);
 	    resolution.setResolutionHeight(DEFAULT_HEIGHT);
@@ -73,11 +76,13 @@ public class VideoStreamingParameters {
     }
 
     public VideoStreamingParameters(int displayDensity, int frameRate, int bitrate, int interval,
-                                    ImageResolution resolution, VideoStreamingFormat format){
+                                    double scale, ImageResolution resolution,
+                                    VideoStreamingFormat format){
 	    this.displayDensity = displayDensity;
 	    this.frameRate = frameRate;
 	    this.bitrate = bitrate;
 	    this.interval = interval;
+	    this.scale = scale;
 	    this.resolution = resolution;
 	    this.format = format;
     }
@@ -109,6 +114,9 @@ public class VideoStreamingParameters {
             if (params.interval > 0) {
                 this.interval = params.interval;
             }
+            if(params.scale > 0.0) {
+                this.scale = params.scale;
+            }
             if (params.resolution != null) {
                 if (params.resolution.getResolutionHeight() != null && params.resolution.getResolutionHeight() > 0) {
                     this.resolution.setResolutionHeight(params.resolution.getResolutionHeight());
@@ -132,10 +140,12 @@ public class VideoStreamingParameters {
      */
     public void update(VideoStreamingCapability capability){
         if(capability.getMaxBitrate()!=null){ this.bitrate = capability.getMaxBitrate() * 1000; } // NOTE: the unit of maxBitrate in getSystemCapability is kbps.
+        if(capability.getScale() != null) { scale = capability.getScale(); }
         ImageResolution resolution = capability.getPreferredResolution();
         if(resolution!=null){
-            if(resolution.getResolutionHeight()!=null && resolution.getResolutionHeight() > 0){ this.resolution.setResolutionHeight(resolution.getResolutionHeight()); }
-            if(resolution.getResolutionWidth()!=null && resolution.getResolutionWidth() > 0){ this.resolution.setResolutionWidth(resolution.getResolutionWidth()); }
+
+            if(resolution.getResolutionHeight()!=null && resolution.getResolutionHeight() > 0){ this.resolution.setResolutionHeight((int)(resolution.getResolutionHeight() / scale)); }
+            if(resolution.getResolutionWidth()!=null && resolution.getResolutionWidth() > 0){ this.resolution.setResolutionWidth((int)(resolution.getResolutionWidth() / scale)); }
         }
         List<VideoStreamingFormat> formats = capability.getSupportedFormats();
         if(formats != null && formats.size()>0){
