@@ -121,6 +121,8 @@ public abstract class SdlRemoteDisplay extends Presentation {
     }
 
     public void handleMotionEvent(final MotionEvent motionEvent){
+        Log.i("convertTouch", "dispatching " + motionEvent.getX() + " " + motionEvent.getY() + " Raw " + motionEvent.getRawX() + " " + motionEvent.getRawY());
+        Log.i("convertTouch", "Pointer count " + motionEvent.getPointerCount());
         uiHandler.post(new Runnable() {
             @Override
             public void run() {

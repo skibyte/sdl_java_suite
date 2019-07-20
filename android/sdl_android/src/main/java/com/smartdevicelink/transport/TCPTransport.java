@@ -293,7 +293,7 @@ public class TCPTransport extends SdlTransport {
      * @param message Message to log
      */
     protected void logInfo(String message) {
-        Log.i(getClass().getName(), message);
+        //Log.i(getClass().getName(), message);
     }
 
     /**

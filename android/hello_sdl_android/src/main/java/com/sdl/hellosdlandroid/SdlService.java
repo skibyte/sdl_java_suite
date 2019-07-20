@@ -53,7 +53,9 @@ import com.smartdevicelink.util.DebugTool;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 public class SdlService extends Service {
@@ -97,7 +99,7 @@ public class SdlService extends Service {
 			enterForeground();
 		}
 	}
-
+Map<FunctionID, OnRPCNotificationListener> onRPCNotificationListenerMap = new HashMap<>();
 	// Helper method to let the service enter foreground mode
 	@SuppressLint("NewApi")
 	public void enterForeground() {
@@ -233,11 +235,26 @@ public class SdlService extends Service {
 			// Create App Icon, this is set in the SdlManager builder
 			SdlArtwork appIcon = new SdlArtwork(ICON_FILENAME, FileType.GRAPHIC_PNG, R.mipmap.ic_launcher, true);
 
+            onRPCNotificationListenerMap.put(FunctionID.ON_HMI_STATUS, new OnRPCNotificationListener() {
+                @Override
+                public void onNotified(RPCNotification notification) {
+                    OnHMIStatus status = (OnHMIStatus) notification;
+                    if (status != null && status.getHmiLevel() == HMILevel.HMI_NONE) {
+
+                        //Stop the stream
+                        if (sdlManager.getVideoStreamManager() != null && sdlManager.getVideoStreamManager().isStreaming()) {
+                            sdlManager.getVideoStreamManager().stopStreaming();
+                        }
+
+                    }
+                }
+            });
 			// The manager builder sets options for your session
 			SdlManager.Builder builder = new SdlManager.Builder(this, APP_ID, APP_NAME, listener);
 			builder.setAppTypes(appType);
 			builder.setTransportType(transport);
 			builder.setAppIcon(appIcon);
+            builder.setRPCNotificationListeners(onRPCNotificationListenerMap);
 			sdlManager = builder.build();
 			sdlManager.start();
 		}
@@ -414,13 +431,24 @@ public class SdlService extends Service {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
          super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_layout);
 
 
         String videoUri = "android.resource://" + getContext().getPackageName() + "/" + R.raw.sdl;
-        VideoView videoView = findViewById(R.id.videoView);
-        videoView.setVideoURI(Uri.parse(videoUri));
-        videoView.start();
+        final Button videoView = findViewById(R.id.videoView);
+        videoView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                int location [] = new int[2];
+                videoView.getLocationInWindow(location);
+                Log.i("convertTouch", "Location " + location[0] + " " + location[1]);
+                Log.i("convertTouch", "Click(" + motionEvent.getX() + " " +motionEvent.getY() + " Raw " + motionEvent.getRawX() + " " + motionEvent.getY() );
+                return false;
+            }
+        });
+//        videoView.setVideoURI(Uri.parse(videoUri));
+//        videoView.start();
     }
+
 }
 }

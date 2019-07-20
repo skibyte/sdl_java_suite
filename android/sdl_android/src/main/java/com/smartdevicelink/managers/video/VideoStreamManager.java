@@ -451,6 +451,8 @@ public class VideoStreamManager extends BaseVideoStreamManager {
 					if(resolution != null){
 						DisplayMetrics displayMetrics = new DisplayMetrics();
 						disp.getMetrics(displayMetrics);
+
+                        Log.i("convertTouch",  "Metrics " + displayMetrics.widthPixels +"x" + displayMetrics.heightPixels + " Res: " + resolution.getResolutionWidth()+"x" + resolution.getResolutionHeight());
 						touchScalar[0] = ((float)displayMetrics.widthPixels) / resolution.getResolutionWidth();
 						touchScalar[1] = ((float)displayMetrics.heightPixels) / resolution.getResolutionHeight();
 					}
@@ -542,6 +544,8 @@ public class VideoStreamManager extends BaseVideoStreamManager {
 				pointer.setCoords(touchCoord.getX() * touchScalar[0], touchCoord.getY() * touchScalar[1]);
 			}
 
+            Log.i("convertTouch",  "TouchScalar " + touchScalar[0] + " " + touchScalar[1]);
+			Log.i("convertTouch",  "Pointer " + pointer.x + " " + pointer.y);
 			MotionEvent.PointerProperties[] pointerProperties = new MotionEvent.PointerProperties[sdlMotionEvent.pointers.size()];
 			MotionEvent.PointerCoords[] pointerCoords = new MotionEvent.PointerCoords[sdlMotionEvent.pointers.size()];
 
@@ -553,6 +557,7 @@ public class VideoStreamManager extends BaseVideoStreamManager {
 				pointerCoords[i] = new MotionEvent.PointerCoords();
 				pointerCoords[i].x = sdlMotionEvent.getPointerByIndex(i).x;
 				pointerCoords[i].y = sdlMotionEvent.getPointerByIndex(i).y;
+                Log.i("convertTouch",  "Pointer i " + pointerCoords[i].x + " " + pointerCoords[i].y);
 				pointerCoords[i].orientation = 0;
 				pointerCoords[i].pressure = 1.0f;
 				pointerCoords[i].size = 1;
