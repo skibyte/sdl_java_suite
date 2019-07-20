@@ -441,8 +441,9 @@ Map<FunctionID, OnRPCNotificationListener> onRPCNotificationListenerMap = new Ha
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 int location [] = new int[2];
                 videoView.getLocationInWindow(location);
+                Log.i("convertTouch", "View size " + videoView.getWidth() + "x" + videoView.getHeight());
                 Log.i("convertTouch", "Location " + location[0] + " " + location[1]);
-                Log.i("convertTouch", "Click(" + motionEvent.getX() + " " +motionEvent.getY() + " Raw " + motionEvent.getRawX() + " " + motionEvent.getY() );
+                Log.i("convertTouch", "Click(" + motionEvent.getX() + " " +motionEvent.getY() + " Raw " + motionEvent.getRawX() + " " + motionEvent.getRawY() );
                 return false;
             }
         });
