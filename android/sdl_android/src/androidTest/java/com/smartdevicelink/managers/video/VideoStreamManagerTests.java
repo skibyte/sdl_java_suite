@@ -3,6 +3,7 @@ package com.smartdevicelink.managers.video;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.smartdevicelink.proxy.interfaces.ISdl;
 import com.smartdevicelink.proxy.interfaces.ISdlServiceListener;
 import com.smartdevicelink.proxy.interfaces.IVideoStreamListener;
 import com.smartdevicelink.proxy.interfaces.OnSystemCapabilityListener;
+import com.smartdevicelink.proxy.rpc.ImageResolution;
 import com.smartdevicelink.proxy.rpc.OnHMIStatus;
 import com.smartdevicelink.proxy.rpc.OnTouchEvent;
 import com.smartdevicelink.proxy.rpc.TouchCoord;
@@ -450,4 +452,106 @@ public class VideoStreamManagerTests extends AndroidTestCase2 {
 		assertEquals(MotionEvent.ACTION_UP, motionEvent.getActionMasked());
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	}
+
+    public void testConvertTouchEvent_Scale_1() {
+        ISdl internalInterface = mock(ISdl.class);
+
+        float scale = 1.0f;
+
+        // Preferred Resolution capability
+        ImageResolution resolution = new ImageResolution(800, 354);
+
+        // Remote display
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        displayMetrics.widthPixels = (int) (resolution.getResolutionWidth() / scale);
+        displayMetrics.heightPixels = (int) (resolution.getResolutionHeight() / scale);
+
+
+        VideoStreamManager videoStreamManager = new VideoStreamManager(internalInterface);
+        List<MotionEvent> motionEventList;
+        long e1TS = 1558124390L;
+        int e1x = 50, e1y = 100;
+        int e1Id = 100;
+        OnTouchEvent testOnTouchEvent;
+        MotionEvent motionEvent;
+        TouchEvent touchEvent1 = new TouchEvent(e1Id, Collections.singletonList(e1TS), Collections.singletonList(new TouchCoord(e1x, e1y)));
+
+        testOnTouchEvent = new OnTouchEvent(TouchType.BEGIN, Arrays.asList(touchEvent1));
+        videoStreamManager.createTouchScalar(resolution, displayMetrics);
+        motionEventList = videoStreamManager.convertTouchEvent(testOnTouchEvent);
+
+
+        motionEvent = motionEventList.get(0);
+        assertEquals(1, motionEvent.getPointerCount());
+        assertEquals(Math.round(e1x/scale), Math.round(motionEvent.getX(0)));
+        assertEquals(Math.round(e1y/scale), Math.round(motionEvent.getY(0)));
+    }
+
+    public void testConvertTouchEvent_Scale_1_25() {
+        ISdl internalInterface = mock(ISdl.class);
+
+        float scale = 1.25f;
+
+        // Preferred Resolution capability
+        ImageResolution resolution = new ImageResolution(800, 354);
+
+        // Remote display
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        displayMetrics.widthPixels = (int) (resolution.getResolutionWidth() / scale);
+        displayMetrics.heightPixels = (int) (resolution.getResolutionHeight() / scale);
+
+
+        VideoStreamManager videoStreamManager = new VideoStreamManager(internalInterface);
+        List<MotionEvent> motionEventList;
+        long e1TS = 1558124390L;
+        int e1x = 50, e1y = 100;
+        int e1Id = 100;
+        OnTouchEvent testOnTouchEvent;
+        MotionEvent motionEvent;
+        TouchEvent touchEvent1 = new TouchEvent(e1Id, Collections.singletonList(e1TS), Collections.singletonList(new TouchCoord(e1x, e1y)));
+
+        testOnTouchEvent = new OnTouchEvent(TouchType.BEGIN, Arrays.asList(touchEvent1));
+        videoStreamManager.createTouchScalar(resolution, displayMetrics);
+        motionEventList = videoStreamManager.convertTouchEvent(testOnTouchEvent);
+
+
+        motionEvent = motionEventList.get(0);
+        assertEquals(1, motionEvent.getPointerCount());
+        assertEquals(Math.round(e1x/scale), Math.round(motionEvent.getX(0)));
+        assertEquals(Math.round(e1y/scale), Math.round(motionEvent.getY(0)));
+    }
+
+    public void testConvertTouchEvent_Scale_1_5() {
+        ISdl internalInterface = mock(ISdl.class);
+
+        float scale = 1.5f;
+
+        // Preferred Resolution capability
+        ImageResolution resolution = new ImageResolution(800, 354);
+
+        // Remote display
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        displayMetrics.widthPixels = (int) (resolution.getResolutionWidth() / scale);
+        displayMetrics.heightPixels = (int) (resolution.getResolutionHeight() / scale);
+
+
+        VideoStreamManager videoStreamManager = new VideoStreamManager(internalInterface);
+        List<MotionEvent> motionEventList;
+        long e1TS = 1558124390L;
+        int e1x = 50, e1y = 100;
+        int e1Id = 100;
+        OnTouchEvent testOnTouchEvent;
+        MotionEvent motionEvent;
+        TouchEvent touchEvent1 = new TouchEvent(e1Id, Collections.singletonList(e1TS), Collections.singletonList(new TouchCoord(e1x, e1y)));
+
+        testOnTouchEvent = new OnTouchEvent(TouchType.BEGIN, Arrays.asList(touchEvent1));
+        videoStreamManager.createTouchScalar(resolution, displayMetrics);
+        motionEventList = videoStreamManager.convertTouchEvent(testOnTouchEvent);
+
+
+        motionEvent = motionEventList.get(0);
+        assertEquals(1, motionEvent.getPointerCount());
+        assertEquals(Math.round(e1x/scale), Math.round(motionEvent.getX(0)));
+        assertEquals(Math.round(e1y/scale), Math.round(motionEvent.getY(0)));
+    }
 }

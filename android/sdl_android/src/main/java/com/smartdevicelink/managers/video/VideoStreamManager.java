@@ -453,9 +453,8 @@ public class VideoStreamManager extends BaseVideoStreamManager {
 						disp.getMetrics(displayMetrics);
 
                         Log.i("convertTouch",  "Metrics " + displayMetrics.widthPixels +"x" + displayMetrics.heightPixels + " Res: " + resolution.getResolutionWidth()+"x" + resolution.getResolutionHeight());
-						touchScalar[0] = ((float)displayMetrics.widthPixels) / resolution.getResolutionWidth();
-						touchScalar[1] = ((float)displayMetrics.heightPixels) / resolution.getResolutionHeight();
-					}
+                        createTouchScalar(resolution, displayMetrics);
+                    }
 
 				}
 
@@ -481,7 +480,8 @@ public class VideoStreamManager extends BaseVideoStreamManager {
 		}
 	}
 
-	@Override
+
+    @Override
 	protected void onTransportUpdate(List<TransportRecord> connectedTransports, boolean audioStreamTransportAvail, boolean videoStreamTransportAvail){
 
 		isTransportAvailable = videoStreamTransportAvail;
@@ -500,6 +500,11 @@ public class VideoStreamManager extends BaseVideoStreamManager {
 			}
 		}
 	}
+
+    void createTouchScalar(ImageResolution resolution, DisplayMetrics displayMetrics) {
+        touchScalar[0] = ((float)displayMetrics.widthPixels) / resolution.getResolutionWidth();
+        touchScalar[1] = ((float)displayMetrics.heightPixels) / resolution.getResolutionHeight();
+    }
 
 	List<MotionEvent> convertTouchEvent(OnTouchEvent onTouchEvent){
 		List<MotionEvent> motionEventList = new ArrayList<MotionEvent>();
@@ -544,8 +549,6 @@ public class VideoStreamManager extends BaseVideoStreamManager {
 				pointer.setCoords(touchCoord.getX() * touchScalar[0], touchCoord.getY() * touchScalar[1]);
 			}
 
-            Log.i("convertTouch",  "TouchScalar " + touchScalar[0] + " " + touchScalar[1]);
-			Log.i("convertTouch",  "Pointer " + pointer.x + " " + pointer.y);
 			MotionEvent.PointerProperties[] pointerProperties = new MotionEvent.PointerProperties[sdlMotionEvent.pointers.size()];
 			MotionEvent.PointerCoords[] pointerCoords = new MotionEvent.PointerCoords[sdlMotionEvent.pointers.size()];
 

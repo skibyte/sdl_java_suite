@@ -32,6 +32,8 @@
 
 package com.smartdevicelink.streaming.video;
 
+import android.util.Log;
+
 import com.smartdevicelink.proxy.rpc.ImageResolution;
 import com.smartdevicelink.proxy.rpc.VideoStreamingCapability;
 import com.smartdevicelink.proxy.rpc.VideoStreamingFormat;
@@ -147,6 +149,7 @@ public class VideoStreamingParameters {
             if(resolution.getResolutionHeight()!=null && resolution.getResolutionHeight() > 0){ this.resolution.setResolutionHeight((int)(resolution.getResolutionHeight() / scale)); }
             if(resolution.getResolutionWidth()!=null && resolution.getResolutionWidth() > 0){ this.resolution.setResolutionWidth((int)(resolution.getResolutionWidth() / scale)); }
         }
+        Log.i("PixelDensity", "Resolution set to: " + this.resolution.getResolutionWidth() + "x" + this.resolution.getResolutionHeight());
         List<VideoStreamingFormat> formats = capability.getSupportedFormats();
         if(formats != null && formats.size()>0){
             this.format = formats.get(0);
