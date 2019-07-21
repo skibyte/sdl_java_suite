@@ -478,6 +478,8 @@ public class VideoStreamManagerTests extends AndroidTestCase2 {
 
 
         VideoStreamManager videoStreamManager = new VideoStreamManager(internalInterface);
+        videoStreamManager.createTouchScalar(resolution, displayMetrics);
+
         List<MotionEvent> motionEventList;
         long e1TS = 1558124390L;
         int e1x = 50, e1y = 100;
@@ -487,7 +489,6 @@ public class VideoStreamManagerTests extends AndroidTestCase2 {
         TouchEvent touchEvent1 = new TouchEvent(e1Id, Collections.singletonList(e1TS), Collections.singletonList(new TouchCoord(e1x, e1y)));
 
         testOnTouchEvent = new OnTouchEvent(TouchType.BEGIN, Arrays.asList(touchEvent1));
-        videoStreamManager.createTouchScalar(resolution, displayMetrics);
         motionEventList = videoStreamManager.convertTouchEvent(testOnTouchEvent);
 
 
