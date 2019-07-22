@@ -120,10 +120,10 @@ public class VideoStreamingParameters {
             }
             if (params.resolution != null) {
                 if (params.resolution.getResolutionHeight() != null && params.resolution.getResolutionHeight() > 0) {
-                    this.resolution.setResolutionHeight((int)(params.resolution.getResolutionHeight() / this.scale));
+                    this.resolution.setResolutionHeight((int)(params.resolution.getResolutionHeight()  ));
                 }
                 if (params.resolution.getResolutionWidth() != null && params.resolution.getResolutionWidth() > 0) {
-                    this.resolution.setResolutionWidth((int)(params.resolution.getResolutionWidth() / this.scale));
+                    this.resolution.setResolutionWidth((int)(params.resolution.getResolutionWidth()  ));
                 }
             }
             if (params.format != null) {

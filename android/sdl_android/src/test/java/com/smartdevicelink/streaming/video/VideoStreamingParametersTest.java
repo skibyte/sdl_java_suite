@@ -49,55 +49,7 @@ public class VideoStreamingParametersTest {
     }
 
     @Test
-    public void update_ByParameters_Scale_1_Resolution_800_354() {
-        preferredResolution = new ImageResolution(800, 354);
-
-        otherParameters.setScale(1.0);
-        otherParameters.setResolution(preferredResolution);
-
-        params.update(otherParameters);
-
-        int width = params.getResolution().getResolutionWidth();
-        int height = params.getResolution().getResolutionHeight();
-
-        assertEquals(800, width);
-        assertEquals(354, height);
-    }
-
-    @Test
-    public void update_ByParameters_Scale_1_25_Resolution_1280_569() {
-        preferredResolution = new ImageResolution(1280, 569);
-
-        otherParameters.setScale(1.25);
-        otherParameters.setResolution(preferredResolution);
-
-        params.update(otherParameters);
-
-        int width = params.getResolution().getResolutionWidth();
-        int height = params.getResolution().getResolutionHeight();
-
-        assertEquals(1024, width);
-        assertEquals(455, height);
-    }
-
-    @Test
-    public void update_ByParameters_Scale_1_5_Resolution_1280_569() {
-        preferredResolution = new ImageResolution(1280, 569);
-
-        otherParameters.setScale(1.5);
-        otherParameters.setResolution(preferredResolution);
-
-        params.update(otherParameters);
-
-        int width = params.getResolution().getResolutionWidth();
-        int height = params.getResolution().getResolutionHeight();
-
-        assertEquals(853, width);
-        assertEquals(379, height);
-    }
-
-    @Test
-    public void update_ByCapability_Scale_1_Resolution_800_354() {
+    public void update_Scale_1_Resolution_800_354() {
         preferredResolution = new ImageResolution(800, 354);
 
         capability.setScale(1.0);
@@ -113,7 +65,7 @@ public class VideoStreamingParametersTest {
     }
 
     @Test
-    public void update_ByCapability_Scale_1_25_Resolution_1280_569() {
+    public void update_Scale_1_25_Resolution_1280_569() {
         preferredResolution = new ImageResolution(1280, 569);
 
         capability.setScale(1.25);
@@ -129,7 +81,7 @@ public class VideoStreamingParametersTest {
     }
 
     @Test
-    public void update_ByCapability_Scale_1_5_Resolution_1280_569() {
+    public void update_Scale_1_5_Resolution_1280_569() {
         preferredResolution = new ImageResolution(1280, 569);
 
         capability.setScale(1.5);
