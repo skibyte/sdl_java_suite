@@ -501,6 +501,7 @@ public class VideoStreamManager extends BaseVideoStreamManager {
     void createTouchScalar(ImageResolution resolution, DisplayMetrics displayMetrics) {
         touchScalar[0] = ((float)displayMetrics.widthPixels) / resolution.getResolutionWidth();
         touchScalar[1] = ((float)displayMetrics.heightPixels) / resolution.getResolutionHeight();
+        Log.i("Mytouch", "Touch scalar: " + touchScalar[0] +" " +  touchScalar[1]);
     }
 
 	List<MotionEvent> convertTouchEvent(OnTouchEvent onTouchEvent){

@@ -21,6 +21,7 @@
  **************************************************************************************************/
 package com.smartdevicelink.haptic;
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -28,6 +29,8 @@ import com.smartdevicelink.proxy.interfaces.ISdl;
 import com.smartdevicelink.proxy.rpc.HapticRect;
 import com.smartdevicelink.proxy.rpc.Rectangle;
 import com.smartdevicelink.proxy.rpc.SendHapticData;
+import com.smartdevicelink.proxy.rpc.VideoStreamingCapability;
+import com.smartdevicelink.proxy.rpc.enums.SystemCapabilityType;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -77,6 +80,7 @@ public class HapticInterfaceManager {
     public void refreshHapticData(View root) {
         ISdl proxy = proxyHolder.get();
         if ((userHapticData == null) && (proxy != null)) {
+
             List<HapticRect> hapticRects = new ArrayList<>();
             findHapticRects(root, hapticRects);
 
@@ -91,6 +95,12 @@ public class HapticInterfaceManager {
         List<View> focusables = new ArrayList<>();
         getFocusableViews(root, focusables);
 
+        double scale = 1.0f;
+//        ISdl proxy = proxyHolder.get();
+//
+//        VideoStreamingCapability dispCap = (VideoStreamingCapability) proxy.getCapability(SystemCapabilityType.VIDEO_STREAMING);
+
+
         int [] loc = new int[2];
         int id = 0;
         for (View view : focusables) {
@@ -104,6 +114,7 @@ public class HapticInterfaceManager {
             rect.setX((float) loc[0]);
             rect.setY((float) loc[1]);
 
+            Log.i("convertto", "Rect: {" + rect.getX() + "," + rect.getY() + "," + rect.getWidth() + "," + rect.getHeight() + "}");
             HapticRect hapticRect = new HapticRect();
             hapticRect.setId(id++);
             hapticRect.setRect(rect);

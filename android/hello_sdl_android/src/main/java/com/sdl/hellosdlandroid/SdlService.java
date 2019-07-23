@@ -7,9 +7,16 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.Display;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
+import android.widget.VideoView;
 
 import com.smartdevicelink.managers.CompletionListener;
 import com.smartdevicelink.managers.SdlManager;
@@ -25,15 +32,19 @@ import com.smartdevicelink.managers.screen.menu.VoiceCommandSelectionListener;
 import com.smartdevicelink.protocol.enums.FunctionID;
 import com.smartdevicelink.proxy.RPCNotification;
 import com.smartdevicelink.proxy.TTSChunkFactory;
+import com.smartdevicelink.proxy.interfaces.OnSystemCapabilityListener;
 import com.smartdevicelink.proxy.rpc.Alert;
 import com.smartdevicelink.proxy.rpc.OnHMIStatus;
 import com.smartdevicelink.proxy.rpc.Speak;
+import com.smartdevicelink.proxy.rpc.VideoStreamingCapability;
 import com.smartdevicelink.proxy.rpc.enums.AppHMIType;
 import com.smartdevicelink.proxy.rpc.enums.FileType;
 import com.smartdevicelink.proxy.rpc.enums.HMILevel;
 import com.smartdevicelink.proxy.rpc.enums.InteractionMode;
+import com.smartdevicelink.proxy.rpc.enums.SystemCapabilityType;
 import com.smartdevicelink.proxy.rpc.enums.TriggerSource;
 import com.smartdevicelink.proxy.rpc.listeners.OnRPCNotificationListener;
+import com.smartdevicelink.streaming.video.SdlRemoteDisplay;
 import com.smartdevicelink.transport.BaseTransportConfig;
 import com.smartdevicelink.transport.MultiplexTransportConfig;
 import com.smartdevicelink.transport.TCPTransportConfig;
@@ -42,7 +53,9 @@ import com.smartdevicelink.util.DebugTool;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 public class SdlService extends Service {
@@ -65,8 +78,8 @@ public class SdlService extends Service {
 	// TCP/IP transport config
 	// The default port is 12345
 	// The IP is of the machine that is running SDL Core
-	private static final int TCP_PORT = 12247;
-	private static final String DEV_MACHINE_IP_ADDRESS = "m.sdl.tools";
+	private static final int TCP_PORT = 12345;
+	private static final String DEV_MACHINE_IP_ADDRESS = "172.27.228.89";
 
 	// variable to create and call functions of the SyncProxy
 	private SdlManager sdlManager = null;
@@ -86,7 +99,7 @@ public class SdlService extends Service {
 			enterForeground();
 		}
 	}
-
+Map<FunctionID, OnRPCNotificationListener> onRPCNotificationListenerMap = new HashMap<>();
 	// Helper method to let the service enter foreground mode
 	@SuppressLint("NewApi")
 	public void enterForeground() {
@@ -156,27 +169,57 @@ public class SdlService extends Service {
 
 			// The app type to be used
 			Vector<AppHMIType> appType = new Vector<>();
-			appType.add(AppHMIType.MEDIA);
+			appType.add(AppHMIType.NAVIGATION);
 
 			// The manager listener helps you know when certain events that pertain to the SDL Manager happen
 			// Here we will listen for ON_HMI_STATUS and ON_COMMAND notifications
 			SdlManagerListener listener = new SdlManagerListener() {
 				@Override
 				public void onStart() {
-					// HMI Status Listener
-					sdlManager.addOnRPCNotificationListener(FunctionID.ON_HMI_STATUS, new OnRPCNotificationListener() {
-						@Override
-						public void onNotified(RPCNotification notification) {
-							OnHMIStatus status = (OnHMIStatus) notification;
-							if (status.getHmiLevel() == HMILevel.HMI_FULL && ((OnHMIStatus) notification).getFirstRun()) {
-								setVoiceCommands();
-								sendMenus();
-								performWelcomeSpeak();
-								performWelcomeShow();
-								preloadChoices();
+					if (sdlManager.getVideoStreamManager() != null) {
+
+						sdlManager.getVideoStreamManager().start(new CompletionListener() {
+							@Override
+							public void onComplete(boolean success) {
+								if (success) {
+								    sdlManager.getSystemCapabilityManager().getCapability(SystemCapabilityType.VIDEO_STREAMING,
+											new OnSystemCapabilityListener() {
+												@Override
+												public void onCapabilityRetrieved(Object capability) {
+													VideoStreamingCapability capability1 = (VideoStreamingCapability)capability;
+
+													Log.e(TAG, "Diagonal: " +  capability1.getDiagonalScreenSize());
+													Log.e(TAG, "PPI: " +  capability1.getPixelPerInch());
+													Log.e(TAG, "Scale: " +  capability1.getScale());
+
+													sdlManager.getVideoStreamManager().startRemoteDisplayStream(getApplicationContext(), MyDisplay.class, null, false);
+												}
+
+												@Override
+												public void onError(String info) {
+
+												}
+											});
+								} else {
+									Log.e(TAG, "Failed to start video streaming manager");
+								}
 							}
-						}
-					});
+						});
+					}
+					// HMI Status Listener
+//					sdlManager.addOnRPCNotificationListener(FunctionID.ON_HMI_STATUS, new OnRPCNotificationListener() {
+//						@Override
+//						public void onNotified(RPCNotification notification) {
+//							OnHMIStatus status = (OnHMIStatus) notification;
+//							if (status.getHmiLevel() == HMILevel.HMI_FULL && ((OnHMIStatus) notification).getFirstRun()) {
+//								setVoiceCommands();
+//								sendMenus();
+//								performWelcomeSpeak();
+//								performWelcomeShow();
+//								preloadChoices();
+//							}
+//						}
+//					});
 				}
 
 				@Override
@@ -192,11 +235,26 @@ public class SdlService extends Service {
 			// Create App Icon, this is set in the SdlManager builder
 			SdlArtwork appIcon = new SdlArtwork(ICON_FILENAME, FileType.GRAPHIC_PNG, R.mipmap.ic_launcher, true);
 
+            onRPCNotificationListenerMap.put(FunctionID.ON_HMI_STATUS, new OnRPCNotificationListener() {
+                @Override
+                public void onNotified(RPCNotification notification) {
+                    OnHMIStatus status = (OnHMIStatus) notification;
+                    if (status != null && status.getHmiLevel() == HMILevel.HMI_NONE) {
+
+                        //Stop the stream
+                        if (sdlManager.getVideoStreamManager() != null && sdlManager.getVideoStreamManager().isStreaming()) {
+                            sdlManager.getVideoStreamManager().stopStreaming();
+                        }
+
+                    }
+                }
+            });
 			// The manager builder sets options for your session
 			SdlManager.Builder builder = new SdlManager.Builder(this, APP_ID, APP_NAME, listener);
 			builder.setAppTypes(appType);
 			builder.setTransportType(transport);
 			builder.setAppIcon(appIcon);
+            builder.setRPCNotificationListeners(onRPCNotificationListenerMap);
 			sdlManager = builder.build();
 			sdlManager.start();
 		}
@@ -365,4 +423,34 @@ public class SdlService extends Service {
 			sdlManager.getScreenManager().presentChoiceSet(choiceSet, InteractionMode.MANUAL_ONLY);
 		}
 	}
+	public static class MyDisplay extends SdlRemoteDisplay {
+    public MyDisplay(Context context, Display display) {
+        super(context, display);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+
+        //String videoUri = "android.resource://" + getContext().getPackageName() + "/" + R.raw.sdl;
+        final Button videoView = findViewById(R.id.button_id);
+        videoView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                int location [] = new int[2];
+                videoView.getLocationOnScreen(location);
+                Log.i("convertTouch", "View size " + videoView.getWidth() + "x" + videoView.getHeight());
+                Log.i("convertTouch", "Location " + location[0] + " " + location[1]);
+                Log.i("convertTouch", "Count: " + motionEvent.getPointerCount());
+                Log.i("convertTouch", "Click(" + motionEvent.getX() + " " +motionEvent.getY() + " Raw " + motionEvent.getRawX() + " " + motionEvent.getRawY() );
+                return false;
+            }
+        });
+//        videoView.setVideoURI(Uri.parse(videoUri));
+//        videoView.start();
+    }
+
+}
 }

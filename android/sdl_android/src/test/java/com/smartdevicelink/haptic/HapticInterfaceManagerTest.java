@@ -21,8 +21,10 @@
  **************************************************************************************************/
 package com.smartdevicelink.haptic;
 
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.smartdevicelink.proxy.interfaces.ISdl;
 import com.smartdevicelink.proxy.rpc.HapticRect;
@@ -45,7 +47,9 @@ import org.mockito.stubbing.Answer;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.doubleThat;
 import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -112,6 +116,36 @@ public class HapticInterfaceManagerTest extends TestCase {
     }
 
     @Test
+    public void testRefreshHapticData_Scale_1_5() {
+
+        double scale = 1.5;
+
+        // Random properties for a button
+        final int buttonX = 96;
+        final int buttonY = 24;
+        int buttonWidth = 148;
+        int buttonHeight = 72;
+
+        View button = createView(buttonX, buttonY, buttonWidth, buttonHeight);
+
+
+        hapticMgr.refreshHapticData(button);
+        verify(mockProxy).sendRPCRequest(captor.capture());
+
+        SendHapticData data = captor.getValue();
+        List<HapticRect> list = data.getHapticRectData();
+        assertEquals(1, list.size());
+        Rectangle current = list.get(0).getRect();
+
+        // Rect should be larger when there is scale
+        assertEquals(144, current.getX());
+        assertEquals(, current.getY());
+        assertEquals(208, current.getWidth());
+        assertEquals(, current.getHeight());
+    }
+
+
+    @Test
     public void testRefreshWithUserData() throws Exception {
         List<HapticRect> rects = new ArrayList<>();
         Rectangle rect = new Rectangle();
@@ -129,6 +163,7 @@ public class HapticInterfaceManagerTest extends TestCase {
         hapticMgr.refreshHapticData(root);
         verify(mockProxy, times(1)).sendRPCRequest(any(SendHapticData.class));
     }
+
 
     private View createViews() {
 
@@ -169,5 +204,25 @@ public class HapticInterfaceManagerTest extends TestCase {
         });
 
         return parent1;
+    }
+
+
+    private View createView(final int x, final int y, int w, int h) {
+        View button = mock(View.class);
+        when(button.isFocusable()).thenReturn(true);
+        when(button.isClickable()).thenReturn(true);
+        doAnswer(new Answer() {
+            @Override
+            public int[] answer(InvocationOnMock invocation) throws Throwable {
+                int[] args = (int[])(invocation.getArguments()[0]);
+                args[0] = x;
+                args[1] = y;
+                return args;
+            }
+        }).when(button).getLocationOnScreen(any(int[].class));
+
+        when(button.getWidth()).thenReturn(w);
+        when(button.getHeight()).thenReturn(h);
+        return button;
     }
 }
