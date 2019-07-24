@@ -95,11 +95,13 @@ public class HapticInterfaceManager {
         List<View> focusables = new ArrayList<>();
         getFocusableViews(root, focusables);
 
-        double scale = 1.0f;
-//        ISdl proxy = proxyHolder.get();
-//
-//        VideoStreamingCapability dispCap = (VideoStreamingCapability) proxy.getCapability(SystemCapabilityType.VIDEO_STREAMING);
+        double scale = 1.0;
+        ISdl proxy = proxyHolder.get();
 
+        VideoStreamingCapability dispCap = (VideoStreamingCapability) proxy.getCapability(SystemCapabilityType.VIDEO_STREAMING);
+        if (dispCap != null && dispCap.getScale() != null) {
+            scale = dispCap.getScale();
+        }
 
         int [] loc = new int[2];
         int id = 0;
@@ -109,10 +111,10 @@ public class HapticInterfaceManager {
             view.getLocationOnScreen(loc);
 
             Rectangle rect = new Rectangle();
-            rect.setWidth((float) w);
-            rect.setHeight((float) h);
-            rect.setX((float) loc[0]);
-            rect.setY((float) loc[1]);
+            rect.setWidth((float) (w * scale));
+            rect.setHeight((float) (h * scale));
+            rect.setX((float) (loc[0] * scale));
+            rect.setY((float) (loc[1] * scale));
 
             Log.i("convertto", "Rect: {" + rect.getX() + "," + rect.getY() + "," + rect.getWidth() + "," + rect.getHeight() + "}");
             HapticRect hapticRect = new HapticRect();
