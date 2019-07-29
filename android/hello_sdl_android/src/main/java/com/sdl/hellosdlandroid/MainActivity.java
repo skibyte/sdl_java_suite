@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
 	private static final String TAG = "MainActivity";
@@ -17,10 +20,23 @@ public class MainActivity extends AppCompatActivity {
 		if(BuildConfig.TRANSPORT.equals("MULTI") || BuildConfig.TRANSPORT.equals("MULTI_HB")) {
 			SdlReceiver.queryForConnectedService(this);
 		}else if(BuildConfig.TRANSPORT.equals("TCP")) {
-			Intent proxyIntent = new Intent(this, SdlService.class);
-			startService(proxyIntent);
+            Button button = findViewById(R.id.start_streaming_button);
+            final EditText ip = findViewById(R.id.ip_text);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(ip.getText().length() > 0) {
+                        Intent proxyIntent = new Intent(MainActivity.this, SdlService.class);
+                        proxyIntent.putExtra(SdlService.IP, ip.getText().toString());
+                        startService(proxyIntent);
+                    }
+
+                }
+            });
 		}
 	}
+
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

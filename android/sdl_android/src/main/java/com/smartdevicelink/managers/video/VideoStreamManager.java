@@ -544,6 +544,7 @@ public class VideoStreamManager extends BaseVideoStreamManager {
 			pointer = sdlMotionEvent.getPointerById(touchEvent.getId());
 			if (pointer != null) {
 				pointer.setCoords(touchCoord.getX() * touchScalar[0], touchCoord.getY() * touchScalar[1]);
+				Log.i("Pixel", "" + pointer.x + "," +pointer.y);
 			}
 
 			MotionEvent.PointerProperties[] pointerProperties = new MotionEvent.PointerProperties[sdlMotionEvent.pointers.size()];
