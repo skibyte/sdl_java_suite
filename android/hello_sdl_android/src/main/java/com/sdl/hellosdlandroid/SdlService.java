@@ -120,7 +120,7 @@ Map<FunctionID, OnRPCNotificationListener> onRPCNotificationListenerMap = new Ha
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-	    if(intent.hasExtra(IP))
+	    if(intent != null && intent.hasExtra(IP))
         {
             DEV_MACHINE_IP_ADDRESS = intent.getStringExtra(IP);
         }
