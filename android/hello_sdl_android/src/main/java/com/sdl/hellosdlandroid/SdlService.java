@@ -16,6 +16,7 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.smartdevicelink.managers.CompletionListener;
@@ -120,7 +121,7 @@ Map<FunctionID, OnRPCNotificationListener> onRPCNotificationListenerMap = new Ha
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-	    if(intent.hasExtra(IP))
+	    if(intent != null && intent.hasExtra(IP))
         {
             DEV_MACHINE_IP_ADDRESS = intent.getStringExtra(IP);
         }
@@ -429,32 +430,32 @@ Map<FunctionID, OnRPCNotificationListener> onRPCNotificationListenerMap = new Ha
 		}
 	}
 	public static class MyDisplay extends SdlRemoteDisplay {
+	    int clickCounter = 0;
     public MyDisplay(Context context, Display display) {
         super(context, display);
     }
 
-    @Override
+
+        @Override
     protected void onCreate(Bundle savedInstanceState) {
          super.onCreate(savedInstanceState);
         setContentView(R.layout.streaming_layout);
 
 
-        String videoUri = "android.resource://" + getContext().getPackageName() + "/" + R.raw.sdl;
-        final VideoView videoView = findViewById(R.id.videoView);
-        videoView.setOnTouchListener(new View.OnTouchListener() {
+        final Button button = findViewById(R.id.button1);
+        final TextView textView = findViewById(R.id.buttons_ifon_id);
+        button.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                textView.setText("Click!!! " + ++clickCounter);
                 int location [] = new int[2];
-                videoView.getLocationInWindow(location);
-                Log.i("convertTouch", "View size " + videoView.getWidth() + "x" + videoView.getHeight());
-                Log.i("convertTouch", "Location " + location[0] + " " + location[1]);
-                Log.i("convertTouch", "Count: " + motionEvent.getPointerCount());
-                Log.i("convertTouch", "Click(" + motionEvent.getX() + " " +motionEvent.getY() + " Raw " + motionEvent.getRawX() + " " + motionEvent.getRawY() );
+                button.getLocationInWindow(location);
+                textView.append("\nButton size: " + button.getWidth() + "x" + button.getHeight());
+                textView.append("\nButton location: " + location[0] + "," + location[1]);
                 return false;
             }
         });
-        videoView.setVideoURI(Uri.parse(videoUri));
-        videoView.start();
     }
 
 }
