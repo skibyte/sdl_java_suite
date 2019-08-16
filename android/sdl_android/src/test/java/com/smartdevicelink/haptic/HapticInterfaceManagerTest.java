@@ -280,7 +280,7 @@ public class HapticInterfaceManagerTest extends TestCase {
 
 
         hapticMgr.refreshHapticData(button);
-        verify(mockProxy).sendRPCRequest(captor.capture());
+        verify(mockProxy).sendRPC(captor.capture());
 
         SendHapticData data = captor.getValue();
         List<HapticRect> list = data.getHapticRectData();

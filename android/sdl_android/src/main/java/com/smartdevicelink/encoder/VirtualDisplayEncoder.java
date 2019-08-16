@@ -112,6 +112,15 @@ public class VirtualDisplayEncoder {
         this.streamingParams = new VideoStreamingParameters(displayDensity, frameRate, bitrate, interval, resolution, format);
     }
 
+    /**
+     * @param displayDensity the density of the virtual display in dpi.
+     * @param resolution the resolution of the virtual display in pixels.
+     * @param frameRate the frame rate of a video format in frames/sec.
+     * @param bitrate the average bitrate in bits/sec.
+     * @param interval the frequency of key frames expressed in seconds between key frames.
+     * @param scale the scaling factor.
+     * @param format the format of the video to be streamed.
+     */
     @SuppressWarnings("unused")
     public void setStreamingParams(int displayDensity, ImageResolution resolution, int frameRate, int bitrate, int interval, double scale, VideoStreamingFormat format) {
         this.streamingParams = new VideoStreamingParameters(displayDensity, frameRate, bitrate, interval, scale, resolution, format);

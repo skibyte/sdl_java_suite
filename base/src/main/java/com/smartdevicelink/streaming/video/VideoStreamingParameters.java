@@ -82,6 +82,15 @@ public class VideoStreamingParameters {
         this(displayDensity, frameRate, bitrate, interval, DEFAULT_SCALE, resolution, format);
     }
 
+    /**
+     * @param displayDensity the density of the virtual display in dpi.
+     * @param frameRate the frame rate of a video format in frames/sec.
+     * @param bitrate the average bitrate in bits/sec.
+     * @param interval the frequency of key frames expressed in seconds between key frames.
+     * @param scale the scaling factor.
+     * @param resolution the resolution of the virtual display in pixels.
+     * @param format the format of the video to be streamed.
+     */
     public VideoStreamingParameters(int displayDensity, int frameRate, int bitrate, int interval,
                                     double scale, ImageResolution resolution,
                                     VideoStreamingFormat format){
@@ -197,10 +206,17 @@ public class VideoStreamingParameters {
         return interval;
     }
 
+    /**
+     * Sets the scaling factor.
+     * @param scale scaling factor that must be >= 1.0.
+     */
     public void setScale(double scale) {
         this.scale = scale;
     }
 
+    /**
+     * @return the scaling factor as double
+     */
     public double getScale() {
         return scale;
     }
